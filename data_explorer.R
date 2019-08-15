@@ -21,12 +21,12 @@ devices_df %>%
   ggplot2::ggplot()+
   ggplot2::geom_point(ggplot2::aes(x=time, y=ipv4))
 
-wifi_df <- lapply(wifi_files, function(wifi){
+wifi_df <- pbapply::pblapply(wifi_files, function(wifi){
   t <- substr(wifi, 11, 29) %>% as.POSIXct(format="%Y-%m-%dT%H:%M:%S")
   jsonlite::fromJSON(wifi) %>% 
     as.data.frame() %>% 
     dplyr::mutate(time = t)
-}) %>% dplyr::bind_rows()
+}, cl = 4) %>% dplyr::bind_rows()
 
 wifi_df %>% 
   dplyr::group_by(time) %>% 
