@@ -12,7 +12,7 @@ import iwlist
 content = iwlist.scan(interface='wlan0')
 cells = iwlist.parse(content)
 essid_list = ['MOVISTAR_67E6','MOVISTAR_67E6b']
-with open(source + 'data2/wifi.csv', 'a+') as outfile:
+with open(source + 'wifi.csv', 'a+') as outfile:
     for essid in essid_list:
         signal_level_dBm, signal_total, signal_quality = '', '', ''
         for cell in cells:
