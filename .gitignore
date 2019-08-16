@@ -2,5 +2,6 @@ venv/
 .ipynb_checkpoints/
 __pycache__/
 data/
+pi-server/node_modules/*
 .DS_Store
 .RHistory
