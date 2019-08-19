@@ -2,12 +2,56 @@
      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-     <div id="tester" style="width:600px;height:250px;"></div>
+     <div id="plot" ></div>
      <script>
-	TESTER = document.getElementById('tester');
-	Plotly.plot( TESTER, [{
-	x: [1, 2, 3, 4, 5],
-	y: [1, 2, 4, 8, 16] }], {
-	margin: { t: 0 } } );
-     </script>
+//'%Y-%m-%dT%H:%M:%S'
+//style="width:1000px;height:750px;"
+function makeplot(){
+	Plotly.d3.csv("wifi.csv", function(data){ processData(data)});
+}
+function processData2(data){
+	
+}
+function processData(data){
+	var x = [], y = [], group = [];
+	for (var i=0; i < data.length; i++) {
+		row = data[i];
+		//if(row['essid'] === "MOVISTAR_67E6"){
+			x.push( row['time'] );
+			y.push( row['signal_quality'] );
+			group.push(row['essid']);
+		//}
+	}
+	//console.log( 'X',x, 'Y',y );
+	makePlotly(x, y, group);
+}
+function makePlotly(x,y, group){
+	var plotDiv = document.getElementById("plot");
+	var traces = [{
+		name: 'test',
+		x: x,
+		y: y,
+		type: 'scatter',
+		mode: 'lines',
+		transforms: [{
+			type: 'groupby',
+			groups: group,
+			styles: [
+			  {target: 'MOVISTAR_67E6', value: {line: {color: 'blue'}}},
+			  {target: 'MOVISTAR_67E6b', value: {line: {color: 'red'}}}
+			]
+		}]
+	}];
+	var layout = {
+		title: 'Custom Range',
+		xaxis: {"type": "date", "autorange": true},
+		yaxis: {"type": "linear", "autorange": true}, 
+		"autosize": true
+
+	};
+	Plotly.plot(plotDiv, traces, layout, {responsive: true});
+	
+}
+makeplot();
+     </script> 
 </body>
