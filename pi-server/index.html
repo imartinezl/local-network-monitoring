@@ -9,20 +9,14 @@
 function makeplot(){
 	Plotly.d3.csv("wifi.csv", function(data){ processData(data)});
 }
-function processData2(data){
-	
-}
 function processData(data){
-	var x = [], y = [], group = [];
-	for (var i=0; i < data.length; i++) {
-		row = data[i];
-		//if(row['essid'] === "MOVISTAR_67E6"){
-			x.push( row['time'] );
-			y.push( row['signal_quality'] );
-			group.push(row['essid']);
-		//}
-	}
-	//console.log( 'X',x, 'Y',y );
+	function unpack(rows, key) {
+        return rows.map(function(row) { return row[key]; });
+    }
+
+    var x = unpack(data, 'time'),
+        y = unpack(data, 'signal_quality'),
+        group = unpack(data, 'essid')
 	makePlotly(x, y, group);
 }
 function makePlotly(x,y, group){
