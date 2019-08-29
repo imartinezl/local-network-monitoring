@@ -2,7 +2,7 @@
      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-     <div id="plot" ></div>
+     <div id="plot" style="height:750px" ></div>
      <script>
 //'%Y-%m-%dT%H:%M:%S'
 //style="width:1000px;height:750px;"
@@ -13,16 +13,22 @@ function processData(data){
 	function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });
     }
-
     var x = unpack(data, 'time'),
         y = unpack(data, 'signal_quality'),
         group = unpack(data, 'essid')
 	makePlotly(x, y, group);
 }
 function makePlotly(x,y, group){
+	var xa = x.filter((item, index, arr) => group[index] === "MOVISTAR_67E6")
+    var xb = x.filter((item, index, arr) => group[index] === "MOVISTAR_67E6b")
+    var ya = y.filter((item, index, arr) => group[index] === "MOVISTAR_67E6").map(f => parseInt(f))
+    var ya_avg = movingAvg(ya, 20, function(val){ return val != 0; });
+    var yb = y.filter((item, index, arr) => group[index] === "MOVISTAR_67E6b").map(f => parseInt(f))
+    var yb_avg = movingAvg(yb, 20, function(val){ return val != 0; });
+    
 	var plotDiv = document.getElementById("plot");
 	var traces = [{
-		name: 'test',
+		name: 'raw',
 		x: x,
 		y: y,
 		type: 'scatter',
@@ -31,21 +37,83 @@ function makePlotly(x,y, group){
 			type: 'groupby',
 			groups: group,
 			styles: [
-			  {target: 'MOVISTAR_67E6', value: {line: {color: 'blue'}}},
-			  {target: 'MOVISTAR_67E6b', value: {line: {color: 'red'}}}
+			  {target: 'MOVISTAR_67E6', value: {line: {width:0.5, color: '#32E875'}}},
+			  {target: 'MOVISTAR_67E6b', value: {line: {width:0.5, color: '#357DED'}}}
 			]
 		}]
+	},
+	{
+		name: 'MOVISTAR_67E6 (avg)',
+		x: xa,
+		y: ya_avg,
+		type:'scatter',
+		mode:'lines',
+		line: {color: '#229B4E'}
+	},
+	{
+		name: 'MOVISTAR_67E6b (avg)',
+		x: xb,
+		y: yb_avg,
+		type:'scatter',
+		mode:'lines',
+		line: {color: '#2456A5'}
 	}];
 	var layout = {
-		title: 'Custom Range',
-		xaxis: {"type": "date", "autorange": true},
-		yaxis: {"type": "linear", "autorange": true}, 
-		"autosize": true
-
+		title: {"text": 'Wi-Fi Signal Quality Analysis', 
+			"font": { "family": "Futura", "size": 30}},
+		margin: {"t": 80},
+		font: { "family": "Helvetica Neue"},
+		xaxis: {"type": "date", "autorange": true, rangeslider: {}},
+		yaxis: {"type": "linear", "autorange": true, fixedrange: true}, 
+		"autosize": true,
+		plot_bgcolor: "white",
+		paper_bgcolor: "white"
 	};
 	Plotly.plot(plotDiv, traces, layout, {responsive: true});
 	
 }
 makeplot();
+/**
+* returns an array with moving average of the input array
+* @param array - the input array
+* @param count - the number of elements to include in the moving average calculation
+* @param qualifier - an optional function that will be called on each 
+*  value to determine whether it should be used
+*/
+function movingAvg(array, count, qualifier){
+
+	// calculate average for subarray
+	var avg = function(array, qualifier){
+
+		var sum = 0, count = 0, val;
+		for (var i in array){
+			val = array[i];
+			if (!qualifier || qualifier(val)){
+				sum += val;
+				count++;
+			}
+		}
+
+		return sum / count;
+	};
+
+	var result = [], val;
+
+	// pad beginning of result with null values
+	for (var i=0; i < count-1; i++)
+		result.push(null);
+
+	// calculate average for each subarray and add to result
+	for (var i=0, len=array.length - count; i <= len; i++){
+
+		val = avg(array.slice(i, i + count), qualifier);
+		if (isNaN(val))
+			result.push(null);
+		else
+			result.push(val);
+	}
+
+	return result;
+}
      </script> 
 </body>
