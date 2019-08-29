@@ -5,7 +5,7 @@ The main goal of this project is to check the quality signal and coverage of a l
 
 ## Built with
 
-### Wi-Fi data collection
+### Wi-Fi network analysis
 
 - [iwlist](https://linux.die.net/man/8/iwlist): detailed wireless information from a wireless interface
 - [python-iwlist](https://github.com/iancoleman/python-iwlist): python scanner and parser for wireless networks
@@ -23,6 +23,10 @@ The main goal of this project is to check the quality signal and coverage of a l
 - [jsonlite](https://github.com/jeroen/jsonlite) - A Robust, High Performance JSON Parser and Generator for R / 1.6
 - [lubridate](https://lubridate.tidyverse.org/) - Library for date-times / 1.7.4
 
+
+### Deployment
+
+The python script [wifi_analysis2.py](wifi_analysis2.py) was executed every minute on a [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) using [crontab](https://crontab.guru/), a cron (time-based job scheduler) expression editor.
 
 
 
