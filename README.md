@@ -29,6 +29,10 @@ The main goal of this project is to check the quality signal and coverage of a l
 The python script [wifi_analysis2.py](wifi_analysis2.py) was executed every minute on a [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) using [crontab](https://crontab.guru/), a cron (time-based job scheduler) expression editor.
 
 
+### Data Visualization
+
+Every minute, requested data was appended to a csv file. In order to visualize this information, a local server was designed using Node.js [express](https://expressjs.com/) server. This server makes a call to request the csv data and builts a plot using [Plotly.js](https://plot.ly/javascript/)
+
 
 sudo iwlist wlan0 scan | egrep "Cell|ESSID|Signal|Rates"
 
