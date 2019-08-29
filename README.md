@@ -3,6 +3,8 @@
 Wi-Fi signal data gathering, analysis and visualization.
 The main goal of this project is to check the quality signal and coverage of a local Wi-Fi router.
 
+![](screenshot.png)
+
 ## Built with
 
 ### Wi-Fi network analysis
