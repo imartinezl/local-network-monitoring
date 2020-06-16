@@ -3,6 +3,8 @@
 Wi-Fi signal data gathering, analysis and visualization.
 The main goal of this project is to check the quality signal and coverage of a local Wi-Fi router.
 
+![](screenshot.png)
+
 ## Built with
 
 ### Wi-Fi network analysis
@@ -33,7 +35,7 @@ The python script [wifi_analysis2.py](wifi_analysis2.py) was executed every minu
 
 Every minute, requested data was appended to a csv file. In order to visualize this information, a local server was designed using Node.js [express](https://expressjs.com/) server. This server makes a call to request the csv data and builts a plot using [Plotly.js](https://plot.ly/javascript/)
 
-
+### Some additional commands to explore
 sudo iwlist wlan0 scan | egrep "Cell|ESSID|Signal|Rates"
 
 sudo nmap -sP -r 192.168.1.0/24
